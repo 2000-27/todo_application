@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from flask import request  , jsonify
 from models import UserModel
+from functools import wraps
 load_dotenv()
 
 def create_access_token(user_id):
@@ -16,6 +17,7 @@ def create_access_token(user_id):
     return token
 
 def token_required(f):
+    @wraps(f)
     def check_jwt_token():
         token = request.headers.get('Authorization')
 

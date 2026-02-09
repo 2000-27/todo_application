@@ -46,4 +46,4 @@ class TaskModel(db.Model):
     )
 
     def __repr__(self):
-        return f"<Task {self.id} - {self.heading} ({self.status.value})>"
+        return f"<Task {self.id} - {self.heading}- {self.description} ({self.status.value})>"
