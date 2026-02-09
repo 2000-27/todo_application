@@ -37,12 +37,12 @@ def token_required(f):
             ).first()
 
             if not current_user:
-                return jsonify({'message': 'User not found'}), 401
+                return jsonify({'message': 'User not found',"status":400}), 400
 
         except Exception as e:
             return jsonify({
                 'message': 'Token is invalid!',
-                'error': str(e)
+                'status': 401
             }), 401
 
         return f(current_user)
