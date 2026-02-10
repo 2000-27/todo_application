@@ -18,11 +18,11 @@ def create_access_token(user_id):
 
 def token_required(f):
     @wraps(f)
-    def check_jwt_token():
+    def check_jwt_token(*args,**kwargs):
         token = request.headers.get('Authorization')
 
         if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
+            return jsonify({'message': 'Token is missing!',"status":400}), 400
 
         try:
             data = jwt.decode(
@@ -38,13 +38,17 @@ def token_required(f):
 
             if not current_user:
                 return jsonify({'message': 'User not found',"status":400}), 400
+            
+            # if not current_user.active:
+            #     return jsonify({'message': 'Please activate your account',"status":400}), 400
+
 
         except Exception as e:
             return jsonify({
                 'message': 'Token is invalid!',
                 'status': 401
             }), 401
-
-        return f(current_user)
+        print(args,kwargs,"-------------")
+        return  f(current_user, *args, **kwargs)
 
     return check_jwt_token

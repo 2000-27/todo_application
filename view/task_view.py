@@ -27,8 +27,6 @@ def create_task(current_user):
             }
         ) ,200 
     except ValidationError as err:
-            # Return validation errors as a JSON response
-            print("***********************************",err)
             return jsonify({
                 "message":err.messages ,
                 "status": 400
@@ -45,10 +43,15 @@ def create_task(current_user):
 
 @task_bp.route("/get_task",methods=["GET"])
 @token_required
-def get_task(current_user):
+def get_single_task(current_user):
     try:
         task_schema =  TaskSchema(many=True)
-        all_task = TaskModel.query.filter_by(user_id=current_user.id).all()
+        task_id = request.args.get("task_id")
+        if task_id :
+            all_task = TaskModel.query.filter_by(user_id=current_user.id,id=task_id).all()
+        else:
+            all_task = TaskModel.query.filter_by(user_id=current_user.id).all()
+        
         all_task = task_schema.dump(all_task)
         return jsonify(
             {    "message":"Task found Successfully",
@@ -62,4 +65,5 @@ def get_task(current_user):
                 "message":str(e),
                 "status":400
             }
-        ) ,400 
+        ) ,400
+    

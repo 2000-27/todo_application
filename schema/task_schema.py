@@ -8,6 +8,7 @@ class TaskSchema(ma.Schema):
     
     status = ma.Method("get_status", dump_only=True)
     is_complete = ma.Boolean(dump_only=True)
+    id = ma.Boolean(dump_only=True)
 
     def get_status(self, obj):
         return obj.status.value
