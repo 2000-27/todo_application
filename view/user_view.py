@@ -39,8 +39,6 @@ def signup():
             }
         ) ,200
     except ValidationError as err:
-            # Return validation errors as a JSON response
-            print("***********************************",err)
             return jsonify({
                 "message":err.messages ,
                 "status": 400
